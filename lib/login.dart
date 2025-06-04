@@ -1,5 +1,6 @@
 import 'package:adm_boletos/Components/colors.dart';
 import 'package:adm_boletos/Components/iniciar_button.dart';
+import 'package:adm_boletos/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,14 @@ class Login extends StatelessWidget {
             spacing: 10,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              StartButton(text: 'Iniciar', onPressed: () {}),
+              SizedBox(height: 200,),
+              StartButton(text: 'Iniciar', onPressed: () {
+              Navigator.push(
+                context,
+                 CupertinoPageRoute(builder: (context) => App()),
+                );
+              },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
