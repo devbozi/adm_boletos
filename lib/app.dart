@@ -39,17 +39,17 @@ class App extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                height: 750,
+                height: 780,
                 decoration: BoxDecoration(
                   color: Colors.black12,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: Column(
-                    spacing: 50,
-                    children: [
-                      Row(
+                child: Column(
+                  spacing: 20,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -91,7 +91,10 @@ class App extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         spacing: 30,
                         children: [
@@ -125,7 +128,10 @@ class App extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Text('PAGAR', style: TextStyle(color: Colors.white),)
+                              Text(
+                                'PAGAR',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ],
                           ),
                           Column(
@@ -158,13 +164,116 @@ class App extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Text('PAGOS', style: TextStyle(color: Colors.white),),
+                              Text(
+                                'PAGOS',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.white),
+                            ),
+                          ),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.all(2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text('A PAGAR'),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.white),
+                            ),
+                          ),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.all(2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text('TOTAL PAGOS'),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.white),
+                            ),
+                          ),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.all(2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text('VENCIDOS'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 400,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(30),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Total pago esse mes',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      r'R$ 23.123,49',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
