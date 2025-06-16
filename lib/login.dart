@@ -1,6 +1,7 @@
-import 'package:adm_boletos/Components/colors.dart';
+// ignore_for_file: file_names
 import 'package:adm_boletos/Components/iniciar_button.dart';
 import 'package:adm_boletos/app.dart';
+import 'package:adm_boletos/components/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
