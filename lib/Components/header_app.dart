@@ -1,3 +1,4 @@
+import 'package:adm_boletos/components/button_text.dart';
 import 'package:adm_boletos/components/texts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +29,8 @@ class Header extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: TextPayment(
-                text: 'VER BOLETOS PAGOS',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+              child: ButtonText(text: 'VER BOLETOS PAGOS'),
               ),
-            ),
           ],
         ),
         Flexible(
