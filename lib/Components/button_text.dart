@@ -31,3 +31,21 @@ class ButtonText extends StatelessWidget {
     );
   }
 }
+
+class TextsButtonsScreen extends StatelessWidget {
+  const TextsButtonsScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ButtonText(text: 'A PAGAR'),
+        ButtonText(text: 'TOTAL PAGOS'),
+        ButtonText(text: 'VENCIDOS'),
+      ],
+    );
+  }
+}

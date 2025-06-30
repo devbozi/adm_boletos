@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class IconsApp extends StatelessWidget {
@@ -52,6 +53,24 @@ class IconsApp extends StatelessWidget {
           'PAGAR',
           style: TextStyle(color: Colors.white),
         ),
+      ],
+    );
+  }
+}
+
+class IconsScreen extends StatelessWidget {
+  const IconsScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      spacing: 30,
+      children: [
+        IconsApp(icon: CupertinoIcons.money_dollar),
+        IconsApp(icon: CupertinoIcons.doc_text),
       ],
     );
   }
