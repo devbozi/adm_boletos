@@ -1,4 +1,3 @@
-import 'package:adm_boletos/components/colors.dart';
 import 'package:adm_boletos/components/coluna_dados.dart';
 import 'package:adm_boletos/components/gradient_button.dart';
 import 'package:adm_boletos/components/texts.dart';
@@ -11,7 +10,7 @@ class LowPartApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 400,
+      height:420,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -20,6 +19,7 @@ class LowPartApp extends StatelessWidget {
         ),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
@@ -45,19 +45,17 @@ class LowPartApp extends StatelessWidget {
               ButtonBorderGradient(),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ColumnDados(),
-              ColumnDados(),
-              ColumnDados(),
-              ColumnDados(),
-              ColumnDados(),
-              ColumnDados(),
-              ColumnDados(),
-              ColumnDados(),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: 50,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                ColumnDados(),
+              ],
+            ),
           ),
         ],
       ),
