@@ -10,7 +10,7 @@ class LowPartApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height:420,
+      height:350,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -47,7 +47,7 @@ class LowPartApp extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(
-              bottom: 50,
+              bottom: 38,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

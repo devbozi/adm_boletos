@@ -1,6 +1,7 @@
 import 'package:adm_boletos/components/button_text.dart';
 import 'package:adm_boletos/components/colors.dart';
 import 'package:adm_boletos/components/icons_app.dart';
+import 'package:adm_boletos/components/leitor_codebar.dart';
 import 'package:adm_boletos/screen_parts/app_bar.dart';
 import 'package:adm_boletos/screen_parts/bottom_bar_screen.dart';
 import 'package:adm_boletos/screen_parts/header_app.dart';
@@ -29,7 +30,7 @@ class _AppState extends State<App> {
             children: [
               Container(
                 width: double.infinity,
-                height: 780,
+                height: 710,
                 decoration: BoxDecoration(
                   color: Colors.black12,
                   borderRadius: BorderRadius.circular(50),
@@ -65,28 +66,7 @@ class _AppState extends State<App> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        width: 60,
-        height: 60,
-        clipBehavior: Clip.hardEdge,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
-        child: ColorFundoIcon(
-          child: IconButton(
-          icon: const Icon(
-            Icons.document_scanner_outlined,
-            color: Colors.white,
-            size: 32,
-          ),
-          onPressed: () {
-            setState(() {
-              currentIndex = 2;
-            });
-          },
-        ),
-        ),
-      ),
+      floatingActionButton: leitorQr(),
     );
   }
 }
