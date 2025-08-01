@@ -1,7 +1,7 @@
 import 'package:adm_boletos/components/button_text.dart';
 import 'package:adm_boletos/components/colors.dart';
 import 'package:adm_boletos/components/icons_app.dart';
-import 'package:adm_boletos/components/leitor_codebar.dart';
+import 'package:adm_boletos/components/barcode_scanner_screen.dart';
 import 'package:adm_boletos/screen_parts/app_bar.dart';
 import 'package:adm_boletos/screen_parts/bottom_bar_screen.dart';
 import 'package:adm_boletos/screen_parts/header_app.dart';
@@ -66,7 +66,25 @@ class _AppState extends State<App> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: leitorQr(),
+      floatingActionButton: SizedBox(
+        width: 60,
+        height: 60,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const BarcodeScannerScreen()),
+            );
+          },
+          elevation: 6.0,
+          shape: const CircleBorder(),
+          child: ClipOval(
+            child: ColorFundoIcon(
+            child: Icon(Icons.qr_code_scanner, size: 30, color: Colors.white,),
+          ),
+          )
+        ),
+      ),
     );
   }
 }
