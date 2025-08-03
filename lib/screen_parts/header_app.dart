@@ -28,7 +28,7 @@ class Header extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 5.0),
               child: ButtonText(text: 'VER BOLETOS PAGOS'),
               ),
           ],

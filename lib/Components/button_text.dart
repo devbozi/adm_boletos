@@ -20,7 +20,7 @@ class ButtonText extends StatelessWidget {
       child: TextButton(
         style: TextButton.styleFrom(
           foregroundColor: Colors.white,
-          padding: EdgeInsets.all(2),
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.zero,
           ),

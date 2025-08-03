@@ -30,15 +30,24 @@ class _AppState extends State<App> {
             children: [
               Container(
                 width: double.infinity,
-                height: 710,
+                height: 690,
                 decoration: BoxDecoration(
                   color: Colors.black12,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   spacing: 20,
                   children: [
-                    Padding(padding: const EdgeInsets.all(30), child: Header()),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 30,
+                        left: 30,
+                        bottom: 5,
+                        right: 30,
+                      ),
+                      child: Header(),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 30),
                       child: IconsScreen(),
@@ -51,19 +60,6 @@ class _AppState extends State<App> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: currentIndex,
-        onItemSelected: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        onCentralButtonPressed: () {
-          setState(() {
-            currentIndex = 2;
-          });
-        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
@@ -80,10 +76,24 @@ class _AppState extends State<App> {
           shape: const CircleBorder(),
           child: ClipOval(
             child: ColorFundoIcon(
-            child: Icon(Icons.qr_code_scanner, size: 30, color: Colors.white,),
+              child: Icon(Icons.qr_code_scanner, size: 30, color: Colors.white),
+            ),
           ),
-          )
         ),
+      ),
+
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: currentIndex,
+        onItemSelected: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        onCentralButtonPressed: () {
+          setState(() {
+            currentIndex = 2;
+          });
+        },
       ),
     );
   }
