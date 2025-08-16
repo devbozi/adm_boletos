@@ -22,19 +22,20 @@ class Header extends StatelessWidget {
             TextPayment(
               text: r'R$ 345.756,87',
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 23,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: ButtonText(text: 'VER BOLETOS PAGOS'),
-              ),
+            ButtonText(text: 'VER BOLETOS PAGOS'),
           ],
         ),
         Flexible(
-          child: Icon(CupertinoIcons.chevron_right, color: Colors.white),
+          child: Icon(
+            CupertinoIcons.chevron_right,
+            size: 24,
+            color: Colors.white,
+          ),
         ),
       ],
     );

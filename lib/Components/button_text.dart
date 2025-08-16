@@ -11,23 +11,16 @@ class ButtonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.white),
+    return TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
         ),
       ),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-        ),
-        onPressed: () {},
-        child: Text(text),
-      ),
+      onPressed: () {},
+      child: Text(text),
     );
   }
 }
@@ -39,13 +32,16 @@ class TextsButtonsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ButtonText(text: 'A PAGAR'),
-        ButtonText(text: 'TOTAL PAGOS'),
-        ButtonText(text: 'VENCIDOS'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 31),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ButtonText(text: 'A PAGAR'),
+          ButtonText(text: 'TOTAL PAGOS'),
+          ButtonText(text: 'VENCIDOS'),
+        ],
+      ),
     );
   }
 }

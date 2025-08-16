@@ -22,7 +22,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: appBarScreen(context),
+      appBar: AppBarWidget(),
       body: Center(
         child: ColorFundoIcon(
           child: Column(
@@ -30,28 +30,31 @@ class _AppState extends State<App> {
             children: [
               Container(
                 width: double.infinity,
-                height: 690,
+                height: 678,
                 decoration: BoxDecoration(
                   color: Colors.black12,
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  ),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  spacing: 20,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                        top: 30,
-                        left: 30,
-                        bottom: 5,
-                        right: 30,
+                        top: 29,
+                        left: 31,
+                        right: 33,
                       ),
                       child: Header(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30),
-                      child: IconsScreen(),
+                    SizedBox(
+                      height: 2,
+                      width: double.infinity,
+                      child: ColoredBox(color: Colors.white12),
                     ),
+                    IconsScreen(),
                     TextsButtonsScreen(),
                     LowPartApp(),
                   ],

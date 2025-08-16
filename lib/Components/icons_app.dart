@@ -2,29 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class IconsApp extends StatelessWidget {
-
   final IconData icon;
   final double? size;
   final Color? color;
   // ignore: non_constant_identifier_names
-  final String? CupertinoIcons;
+  final String? cupertinoIcons;
 
   const IconsApp({
     super.key,
-     required this.icon,
-       this.size = 45.0,
-         // ignore: non_constant_identifier_names
-         this.color = Colors.white, this.CupertinoIcons,
+    required this.icon,
+    this.size = 40.0,
+    // ignore: non_constant_identifier_names
+    this.color = Colors.white,
+    this.cupertinoIcons,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      spacing: 5,
       children: [
+        SizedBox(height: 28),
         Container(
-          width: 50,
-          height: 50,
+          width: 53,
+          height: 53,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -42,34 +42,28 @@ class IconsApp extends StatelessWidget {
                 end: Alignment.bottomCenter,
               ).createShader(bounds);
             },
-            child: Icon(
-              icon,
-              size: size,
-              color: color,
-            ),
+            child: Icon(icon, size: size, color: color),
           ),
         ),
-        Text(
-          'PAGAR',
-          style: TextStyle(color: Colors.white),
-        ),
+        SizedBox(height: 12),
+        Text('PAGAR', style: TextStyle(color: Colors.white, fontSize: 12)),
+        SizedBox(height: 35),
       ],
     );
   }
 }
 
 class IconsScreen extends StatelessWidget {
-  const IconsScreen({
-    super.key,
-  });
+  const IconsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      spacing: 30,
       children: [
+        SizedBox(width: 31),
         IconsApp(icon: CupertinoIcons.money_dollar),
+        SizedBox(width: 39),
         IconsApp(icon: CupertinoIcons.doc_text),
       ],
     );

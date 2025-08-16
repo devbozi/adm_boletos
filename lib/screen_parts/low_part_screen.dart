@@ -10,7 +10,7 @@ class LowPartApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height:350,
+      height: 350,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -19,43 +19,55 @@ class LowPartApp extends StatelessWidget {
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(30),
-                child: Column(
+          Padding(
+            padding: const EdgeInsets.only(left: 30, top: 29, right: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   children: [
                     TextPayment(
                       text: 'Total pago esse mes',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     TextPayment(
                       text: r'R$ 23.123,49',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 25,
+                        fontSize: 23,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-              ),
-              ButtonBorderGradient(),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 38,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                ColumnDados(),
+                ButtonBorderGradient(),
               ],
             ),
+          ),
+          SizedBox(height: 25),
+          SizedBox(
+            height: 2,
+            width: double.infinity,
+            child: ColoredBox(color: Colors.black12),
+          ),
+          SizedBox(height: 25),
+          Row(
+            children: [
+              SizedBox(width: 30),
+              TextPayment(
+                text: 'Seus boletos pagos de 2025',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ],
+          ),
+          SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [ColumnDados()],
           ),
         ],
       ),

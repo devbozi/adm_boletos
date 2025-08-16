@@ -20,7 +20,7 @@ class _ColumnDadosState extends State<ColumnDados> {
     {'mes': 'Ago', 'valor': 1000.0},
   ];
 
-  final double fatorEscala = 0.1;
+  final double fatorEscala = 0.05;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +37,8 @@ class _ColumnDadosState extends State<ColumnDados> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(height: 8),
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 600),
+                        duration: Duration(milliseconds: 900),
                         curve: Curves.easeInOut,
                         width: 30,
                         clipBehavior: Clip.hardEdge,
