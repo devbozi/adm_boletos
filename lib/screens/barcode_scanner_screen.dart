@@ -1,3 +1,6 @@
+import 'package:adm_boletos/models/boleto.dart';
+import 'package:adm_boletos/services/boleto_storage.dart';
+import 'package:adm_boletos/utils/boleto_utils';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
@@ -66,7 +69,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
         rotation: InputImageRotation.rotation0deg,
-        format: InputImageFormatValue.fromRawValue(image.format.raw) ?? InputImageFormat.nv21,
+        format:
+            InputImageFormatValue.fromRawValue(image.format.raw) ??
+            InputImageFormat.nv21,
         bytesPerRow: image.planes[0].bytesPerRow,
       ),
     );
@@ -79,12 +84,35 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
         if (barcode.rawValue != null &&
             barcode.rawValue!.length >= 44 &&
             barcode.rawValue!.length <= 48) {
-          final linhaDigitavel = barcode.rawValue!.replaceAll(RegExp(r'\s+'), '');
-
+          final linhaDigitavel = barcode.rawValue!.replaceAll(
+            RegExp(r'\s+'),
+            '',
+          );
           final valor = _extrairValor(linhaDigitavel);
-          final vencimento = _extrairDataVencimento(linhaDigitavel);
+          String? vencimento = _extrairDataVencimento(linhaDigitavel);
 
           await _cameraController?.stopImageStream();
+
+          if (vencimento == null) {
+            vencimento = await _solicitarDataManual();
+            if (vencimento == null) {
+              _isDetecting = false;
+              return;
+            }
+          }
+
+          final novoBoleto = Boleto(
+            codigo: linhaDigitavel,
+            valor: valor ?? '',
+            vencimento: vencimento,
+            status: calcularStatus(vencimento),
+          );
+
+          try {
+            await salvarBoleto(novoBoleto);
+          } catch (e) {
+            debugPrint('Erro ao salvar boleto: $e');
+          }
 
           setState(() {
             _codigoCompleto = linhaDigitavel;
@@ -99,6 +127,23 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     }
 
     _isDetecting = false;
+  }
+
+  Future<String?> _solicitarDataManual() async {
+    if (!mounted) return null; // Protege o uso do context
+    final DateTime? selecionada = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (!mounted) return null; // Protege o uso do context após await
+    if (selecionada != null) {
+      return DateFormat('dd/MM/yyyy').format(selecionada);
+    }
+
+    return null;
   }
 
   String? _extrairValor(String linha) {
@@ -134,21 +179,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     return null;
   }
 
-  void _solicitarDataManual() async {
-    final DateTime? selecionada = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selecionada != null) {
-      setState(() {
-        _vencimento = DateFormat('dd/MM/yyyy').format(selecionada);
-      });
-    }
-  }
-
   @override
   void dispose() {
     _cameraController?.dispose();
@@ -158,74 +188,83 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Leitor de Boletos')),
+      appBar: AppBar(title: const Text('Escanear Boleto')),
       body: Stack(
         children: [
           CameraPreview(_cameraController!),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeOut,
-            bottom: _mostrarDados ? 30 : -300,
-            left: 20,
-            right: 20,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              opacity: _mostrarDados ? 1.0 : 0.0,
+          if (_mostrarDados)
+            Positioned(
+              bottom: 20,
+              left: 20,
+              right: 20,
               child: Card(
-                color: Colors.white,
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                color: Colors.white60,
+                elevation: 4,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Código de Barras:', style: theme.textTheme.titleMedium),
-                      const SizedBox(height: 8),
-                      SelectableText(
-                        _codigoCompleto ?? '',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      TextButton.icon(
-                        onPressed: () {
-                          if (_codigoCompleto != null) {
-                            Clipboard.setData(
-                              ClipboardData(text: _codigoCompleto!),
+                      Text('Código: $_codigoCompleto', textAlign: TextAlign.center),
+                      Text('Valor: $_valor'),
+                      Text('Vencimento: $_vencimento'),
+                      const SizedBox(height: 12),
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.check_circle_outline),
+                        label: const Text('Adicionar Boleto'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          textStyle: const TextStyle(fontSize: 16),
+                        ),
+                        onPressed: () async {
+                          if (_codigoCompleto != null &&
+                              _valor != null &&
+                              _vencimento != null) {
+                            final novoBoleto = Boleto(
+                              codigo: _codigoCompleto!,
+                              valor: _valor!,
+                              vencimento: _vencimento!,
+                              status: calcularStatus(_vencimento!),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Código copiado!')),
-                            );
+
+                            // Captura os helpers antes do await
+                            final messenger = ScaffoldMessenger.of(context);
+                            final navigator = Navigator.of(context);
+
+                            try {
+                              await salvarBoleto(novoBoleto);
+                              messenger.showSnackBar(
+                                const SnackBar(
+                                  content: Text('Boleto salvo com sucesso!'),
+                                ),
+                              );
+                              navigator.pop(); // Volta para a Home
+                            } catch (e) {
+                              debugPrint('Erro ao salvar boleto: $e');
+                              messenger.showSnackBar(
+                                const SnackBar(
+                                  content: Text('Erro ao salvar boleto'),
+                                ),
+                              );
+                            }
                           }
                         },
-                        icon: const Icon(Icons.copy),
-                        label: const Text('Copiar código'),
                       ),
-                      const Divider(),
-                      if (_valor != null)
-                        Text('Valor: $_valor', style: const TextStyle(fontSize: 16)),
-                      if (_vencimento != null)
-                        Text('Vencimento: $_vencimento', style: const TextStyle(fontSize: 16)),
-                      if (_vencimento == null)
-                        TextButton.icon(
-                          onPressed: _solicitarDataManual,
-                          icon: const Icon(Icons.edit_calendar),
-                          label: const Text('Inserir data manualmente'),
-                        ),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
