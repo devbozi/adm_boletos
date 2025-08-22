@@ -158,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen>
     final altura = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Color(0xff0c0b66),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

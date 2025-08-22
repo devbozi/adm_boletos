@@ -11,11 +11,19 @@ class CustomBottomNavBar extends StatelessWidget {
     required this.onItemTapped,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
+@override
+Widget build(BuildContext context) {
+  return Material(
+    elevation: 8,
+    color: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(30),
+      ),
+    ),
+    child: SizedBox(
       height: 70,
-      decoration: const BoxDecoration(color: Colors.white),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -26,8 +34,9 @@ class CustomBottomNavBar extends StatelessWidget {
           _buildIcon(Icons.person, 4),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildIcon(IconData icon, int index) {
     return GestureDetector(

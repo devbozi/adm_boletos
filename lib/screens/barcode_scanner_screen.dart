@@ -1,6 +1,6 @@
 import 'package:adm_boletos/models/boleto.dart';
 import 'package:adm_boletos/services/boleto_storage.dart';
-import 'package:adm_boletos/utils/boleto_utils';
+import 'package:adm_boletos/utils/boleto_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
@@ -248,7 +248,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                                   content: Text('Boleto salvo com sucesso!'),
                                 ),
                               );
-                              navigator.pop(); // Volta para a Home
+                              navigator.pop();
                             } catch (e) {
                               debugPrint('Erro ao salvar boleto: $e');
                               messenger.showSnackBar(
