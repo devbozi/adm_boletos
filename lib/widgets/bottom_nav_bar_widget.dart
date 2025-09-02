@@ -1,7 +1,7 @@
 import 'package:adm_boletos/screens/barcode_scanner_screen.dart';
 import 'package:flutter/material.dart';
 
-class CustomBottomNavBar extends StatelessWidget {
+class CustomBottomNavBar extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
@@ -11,37 +11,53 @@ class CustomBottomNavBar extends StatelessWidget {
     required this.onItemTapped,
   });
 
-@override
-Widget build(BuildContext context) {
-  return Material(
-    elevation: 8,
-    color: Colors.white,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(30),
-        topRight: Radius.circular(30),
-      ),
-    ),
-    child: SizedBox(
-      height: 70,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildIcon(Icons.home, 0),
-          _buildIcon(Icons.bar_chart, 1),
-          _buildCentralButton(context),
-          _buildIcon(Icons.description, 3),
-          _buildIcon(Icons.person, 4),
-        ],
-      ),
-    ),
-  );
+  @override
+  State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
 }
 
+class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 8,
+      color: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      child: SizedBox(
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildIcon(Icons.home, 0),
+            _buildIcon(Icons.bar_chart, 1),
+            _buildCentralButton(context),
+            _buildIcon(Icons.description, 3),
+            _buildIcon(Icons.person, 4),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildIcon(IconData icon, int index) {
+    final isSelected = widget.selectedIndex == index;
+
     return GestureDetector(
-      onTap: () => onItemTapped(index),
-      child: Icon(icon, color: Colors.black, size: 28),
+      onTap: () => widget.onItemTapped(index),
+      child: AnimatedScale(
+        scale: isSelected ? 1.2 : 1.0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        child: Icon(
+          icon,
+          color: isSelected ? const Color(0xff539c96) : Colors.black,
+          size: 28,
+        ),
+      ),
     );
   }
 

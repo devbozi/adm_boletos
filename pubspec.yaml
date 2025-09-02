@@ -63,8 +63,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets\image\documents_icon.png
-    - assets\image\pay_icon.png
+    #- assets/image/
+    #- assets/image/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

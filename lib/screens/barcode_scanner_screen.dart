@@ -20,10 +20,24 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   late BarcodeScanner _barcodeScanner;
   bool _isDetecting = false;
 
+  String? _linhaDigitavel;
   String? _codigoCompleto;
   String? _valor;
   String? _vencimento;
   bool _mostrarDados = false;
+
+  String _converterParaISO(String dataBr) {
+    try {
+      final partes = dataBr.split('/');
+      final dia = int.parse(partes[0]);
+      final mes = int.parse(partes[1]);
+      final ano = int.parse(partes[2]);
+      final data = DateTime(ano, mes, dia);
+      return data.toIso8601String().split('T').first; // yyyy-MM-dd
+    } catch (_) {
+      return dataBr; // fallback
+    }
+  }
 
   @override
   void initState() {
@@ -84,12 +98,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
         if (barcode.rawValue != null &&
             barcode.rawValue!.length >= 44 &&
             barcode.rawValue!.length <= 48) {
-          final linhaDigitavel = barcode.rawValue!.replaceAll(
-            RegExp(r'\s+'),
-            '',
-          );
-          final valor = _extrairValor(linhaDigitavel);
-          String? vencimento = _extrairDataVencimento(linhaDigitavel);
+          _linhaDigitavel = barcode.rawValue!.replaceAll(RegExp(r'\s+'), '');
+          final valor = _extrairValor(_linhaDigitavel!);
+          String? vencimento = _extrairDataVencimento(_linhaDigitavel!);
 
           await _cameraController?.stopImageStream();
 
@@ -101,8 +112,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             }
           }
 
+          final linhaReconstruida =
+              _linhaDigitavel?.length == 47
+                  ? reconstruirCodigoDeBarras(_linhaDigitavel!)
+                  : _linhaDigitavel;
+
           final novoBoleto = Boleto(
-            codigo: linhaDigitavel,
+            codigo: linhaReconstruida ?? '',
             valor: valor ?? '',
             vencimento: vencimento,
             status: calcularStatus(vencimento),
@@ -115,7 +131,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           }
 
           setState(() {
-            _codigoCompleto = linhaDigitavel;
+            _codigoCompleto = _linhaDigitavel;
             _valor = valor;
             _vencimento = vencimento;
             _mostrarDados = true;
@@ -210,7 +226,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Código: $_codigoCompleto', textAlign: TextAlign.center),
+                      Text(
+                        'Código: $_codigoCompleto',
+                        textAlign: TextAlign.center,
+                      ),
                       Text('Valor: $_valor'),
                       Text('Vencimento: $_vencimento'),
                       const SizedBox(height: 12),
@@ -227,17 +246,23 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                           textStyle: const TextStyle(fontSize: 16),
                         ),
                         onPressed: () async {
-                          if (_codigoCompleto != null &&
+                          if (_linhaDigitavel != null &&
                               _valor != null &&
                               _vencimento != null) {
+                            final codigoFinal =
+                                _linhaDigitavel!.length == 47
+                                    ? reconstruirCodigoDeBarras(
+                                      _linhaDigitavel!,
+                                    )
+                                    : _linhaDigitavel!;
+
                             final novoBoleto = Boleto(
-                              codigo: _codigoCompleto!,
+                              codigo: codigoFinal,
                               valor: _valor!,
-                              vencimento: _vencimento!,
+                              vencimento: _converterParaISO(_vencimento!),
                               status: calcularStatus(_vencimento!),
                             );
 
-                            // Captura os helpers antes do await
                             final messenger = ScaffoldMessenger.of(context);
                             final navigator = Navigator.of(context);
 

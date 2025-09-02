@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 class Boleto {
-  final String codigo;
-  final String? valor;
-  final String? vencimento;
-  final String? status;
+  String codigo;
+  String? valor;
+  String? vencimento;
+  String? status;
 
   Boleto({
     required this.codigo,
@@ -13,25 +13,22 @@ class Boleto {
     this.status,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
+  factory Boleto.fromJson(String jsonStr) {
+    final json = jsonDecode(jsonStr);
+    return Boleto(
+      codigo: json['codigo'],
+      valor: json['valor'],
+      vencimento: json['vencimento'],
+      status: json['status'],
+    );
+  }
+
+  String toJson() {
+    return jsonEncode({
       'codigo': codigo,
       'valor': valor,
       'vencimento': vencimento,
       'status': status,
-    };
+    });
   }
-
-  factory Boleto.fromMap(Map<String, dynamic> map) {
-    return Boleto(
-      codigo: map['codigo'],
-      valor: map['valor'],
-      vencimento: map['vencimento'],
-      status: map['status'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Boleto.fromJson(String source) => Boleto.fromMap(json.decode(source));
 }
