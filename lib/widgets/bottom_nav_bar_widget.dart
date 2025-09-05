@@ -1,16 +1,20 @@
-import 'package:adm_boletos/screens/barcode_scanner_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   final int selectedIndex;
+  final int currentIndex;
+  final bool centralButtonActive;
   final Function(int) onItemTapped;
+  final VoidCallback onCentralButtonPressed;
 
   const CustomBottomNavBar({
     super.key,
     required this.selectedIndex,
+    required this.currentIndex,
     required this.onItemTapped,
+    required this.onCentralButtonPressed,
+    required this.centralButtonActive,
   });
-
   @override
   State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
 }
@@ -34,7 +38,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           children: [
             _buildIcon(Icons.home, 0),
             _buildIcon(Icons.bar_chart, 1),
-            _buildCentralButton(context),
+            _buildCentralButton(2, context),
             _buildIcon(Icons.description, 3),
             _buildIcon(Icons.person, 4),
           ],
@@ -44,7 +48,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   }
 
   Widget _buildIcon(IconData icon, int index) {
-    final isSelected = widget.selectedIndex == index;
+    final int realIndex = index > 2 ? index - 1 : index;
+    final bool isSelected = widget.selectedIndex == realIndex;
 
     return GestureDetector(
       onTap: () => widget.onItemTapped(index),
@@ -61,46 +66,41 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     );
   }
 
-  Widget _buildCentralButton(BuildContext context) {
+  Widget _buildCentralButton(int index, BuildContext context) {
+    final isActive = widget.centralButtonActive;
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 500),
-            pageBuilder: (_, __, ___) => const BarcodeScannerScreen(),
-            transitionsBuilder: (_, animation, __, child) {
-              final offsetAnimation = Tween<Offset>(
-                begin: const Offset(0.0, 1.0),
-                end: Offset.zero,
-              ).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-              );
-
-              return SlideTransition(position: offsetAnimation, child: child);
-            },
-          ),
-        );
-      },
+      onTap: widget.onCentralButtonPressed,
       child: Container(
         width: 58,
         height: 58,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: LinearGradient(
-            colors: [Color(0xff95f9c3), Color(0xff539c96), Color(0xff0c0b66)],
-            stops: [0, 0, 1],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
+          gradient:
+              isActive
+                  ? const LinearGradient(
+                    colors: [Color(0xff0c0b66), Color(0xff539c96)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                  : const LinearGradient(
+                    colors: [
+                      Color(0xff95f9c3),
+                      Color(0xff539c96),
+                      Color(0xff0c0b66),
+                    ],
+                    stops: [0, 0, 1],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black26,
+              color: Colors.black38,
               blurRadius: 8,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
+
         child: const Icon(
           Icons.qr_code_scanner_rounded,
           color: Colors.white,

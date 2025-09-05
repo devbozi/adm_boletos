@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:adm_boletos/models/boleto.dart';
 import 'package:adm_boletos/services/boleto_storage.dart';
 import 'package:adm_boletos/screens/boleto_historico_screen.dart';
-import 'package:adm_boletos/widgets/bottom_nav_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,16 +13,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-
-      void didPopNext() {
-        _carregarDados();
-      }
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void didPopNext() {
+    _carregarDados();
   }
 
   int tabSelecionada = 1;
@@ -69,48 +60,51 @@ class _HomeScreenState extends State<HomeScreen>
     _controller.forward();
   }
 
-Future<void> _carregarDados() async {
-  final todos = await carregarBoletos();
-  final agora = DateTime.now();
+  Future<void> _carregarDados() async {
+    final todos = await carregarBoletos();
+    final agora = DateTime.now();
 
-  final pendentes = todos.where((b) => b.status == 'pendente');
+    final pendentes = todos.where((b) => b.status == 'pendente');
 
-  final pagosMesAtual = todos.where((b) {
-    final vencStr = b.vencimento;
-    if (vencStr == null || vencStr.isEmpty) return false;
+    final pagosMesAtual = todos.where((b) {
+      final vencStr = b.vencimento;
+      if (vencStr == null || vencStr.isEmpty) return false;
 
-    final venc = DateTime.tryParse(vencStr);
-    return venc != null &&
-        b.status == 'pago' &&
-        venc.month == agora.month &&
-        venc.year == agora.year;
-  });
+      final venc = DateTime.tryParse(vencStr);
+      return venc != null &&
+          b.status == 'pago' &&
+          venc.month == agora.month &&
+          venc.year == agora.year;
+    });
 
-  final mapa = <String, double>{};
-  for (var b in todos) {
-    final vencStr = b.vencimento;
-    if (vencStr == null || vencStr.isEmpty) continue;
+    final mapa = <String, double>{};
+    for (var b in todos) {
+      final vencStr = b.vencimento;
+      if (vencStr == null || vencStr.isEmpty) continue;
 
-    final venc = DateTime.tryParse(vencStr);
-    if (venc != null && b.status == 'pago' && venc.year == 2025) {
-      // Padroniza a chave para bater com a lista de meses
-      final chave = DateFormat.MMM('pt_BR').format(venc).toUpperCase().substring(0, 3);
+      final venc = DateTime.tryParse(vencStr);
+      if (venc != null && b.status == 'pago' && venc.year == 2025) {
+        // Padroniza a chave para bater com a lista de meses
+        final chave = DateFormat.MMM(
+          'pt_BR',
+        ).format(venc).toUpperCase().substring(0, 3);
 
-      final rawValor = b.valor ?? '0';
-      final limpo = rawValor.replaceAll(RegExp(r'[^\d,]'), '').replaceAll(',', '.');
-      final valor = double.tryParse(limpo) ?? 0.0;
+        final rawValor = b.valor ?? '0';
+        final limpo = rawValor
+            .replaceAll(RegExp(r'[^\d,]'), '')
+            .replaceAll(',', '.');
+        final valor = double.tryParse(limpo) ?? 0.0;
 
-      mapa[chave] = (mapa[chave] ?? 0.0) + valor;
+        mapa[chave] = (mapa[chave] ?? 0.0) + valor;
+      }
     }
+
+    setState(() {
+      totalPendentes = _calcularTotal(pendentes.toList());
+      totalPagoMesAtual = _calcularTotal(pagosMesAtual.toList());
+      grafico2025 = mapa;
+    });
   }
-
-  setState(() {
-    totalPendentes = _calcularTotal(pendentes.toList());
-    totalPagoMesAtual = _calcularTotal(pagosMesAtual.toList());
-    grafico2025 = mapa;
-  });
-}
-
 
   double _calcularTotal(List<Boleto> boletos) {
     return boletos.fold(0.0, (total, b) {
@@ -378,13 +372,13 @@ Future<void> _carregarDados() async {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
     );
   }
 }
+
+
+     // teste especifico para detectar motivos de nao salvamento 
+
 
 // import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';

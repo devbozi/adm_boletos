@@ -1,4 +1,4 @@
-import 'package:adm_boletos/screens/home_screen.dart';
+import 'package:adm_boletos/screens/home_controller.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => const HomeController()),
                       );
                     },
                     child: const Text(
